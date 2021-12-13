@@ -1,5 +1,6 @@
 # IFXG
 AFK EXP Grinder for a famous building and shooting game.
+NOTICE: Nor this program nor the author is associated with any shooting game. Use this at your own risk!
 
 ## How to use
 
