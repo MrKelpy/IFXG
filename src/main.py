@@ -11,11 +11,23 @@ import time
 
 
 # Third Party Imports
+import screeninfo
 import keyboard
-import mouse
+import pyautogui
 
 # Local Application Import
 from threads.antiafk import anti_afk_thread, focus_fortnite
+
+
+def get_play_button():
+    """
+    Returns the relative monitor position for the Play button.
+    The values below have been acquired through testing.
+    :return:
+    """
+
+    screen_info = screeninfo.get_monitors()[0]
+    return (0.01*88.3)*screen_info.width, (0.01*68)*screen_info.height
 
 
 def fix_screen():
@@ -53,9 +65,10 @@ def hit_ready():
     """
     fix_screen()
     focus_fortnite()
-    mouse.move(1131, 489)
+    x, y = get_play_button()
+    pyautogui.moveTo(x, y)
     time.sleep(0.5)
-    mouse.click()
+    pyautogui.click()
 
 
 def finish_imposters():

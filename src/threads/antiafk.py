@@ -12,7 +12,7 @@ import threading
 
 # Third Party Imports
 import keyboard
-import mouse
+import pyautogui
 import pygetwindow
 
 # Local Application Imports
@@ -70,9 +70,9 @@ def anti_afk_thread(action_lock: threading.Lock):
             elif action_choice == "hitting":
 
                 # Handles left clicks (Hitting)
-                mouse.click()
+                pyautogui.click()
                 time.sleep(0.3)
-                mouse.click()
+                pyautogui.click()
 
             else:
 
