@@ -18,6 +18,19 @@ import mouse
 from threads.antiafk import anti_afk_thread, focus_fortnite
 
 
+def fix_screen():
+    """
+    Fixes the screen. This is extremely needed, since the
+    level up screen comes up quite some times, and new shop updates
+    can also appear, they'll often break the bot.
+    This function exists to prevent that from happening, by occasionally esc'ing twice.
+    :return:
+    """
+    keyboard.press_and_release("esc")
+    time.sleep(0.1)
+    keyboard.press_and_release("esc")
+
+
 def skip_vote():
     """
     Skips the imposter vote. This function will be called before the finish_imposters
@@ -32,13 +45,13 @@ def skip_vote():
     print("[IFXG][GAME] Tried-for skipping the vote.")
 
 
-
 def hit_ready():
     """
     Hits the "Ready" button in the initializer screen.
     This assumes that the Imposters gamemode is already setup.
     :return:
     """
+    fix_screen()
     focus_fortnite()
     mouse.move(1131, 489)
     time.sleep(0.5)
