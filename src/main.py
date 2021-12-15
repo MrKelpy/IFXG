@@ -8,6 +8,7 @@ __license__ = "MIT LICENSE"
 # Built-in Imports
 import threading
 import time
+import os
 
 
 # Third Party Imports
@@ -16,7 +17,20 @@ import keyboard
 import pyautogui
 
 # Local Application Import
+import LaminariaCore
 from threads.antiafk import anti_afk_thread, focus_fortnite
+
+
+def log(logs_path: str, msg: str, src: str):
+    """
+    Logs a message to both the console and the logs file via a very simple
+    logging system.
+    :param: src -> Where the log is coming from
+    :return:
+    """
+
+    with open(logs_path, "a") as logsfile:
+        logsfile.write(f"[IFXG][LOG] {msg}")
 
 
 def get_play_button():
@@ -84,7 +98,7 @@ def finish_imposters():
     keyboard.release("e")
 
 
-def start_bot():
+def start_bot(logs_path: str):
     """
     Starts the bot and all of its threads.
     :return:
@@ -121,4 +135,18 @@ def start_bot():
 
 
 if __name__ == "__main__":
-    start_bot()
+
+    log_session = LaminariaCore.get_formatted_date_now(formatting=2)
+    logs_path = os.path.join(os.getcwd(), "logs", log_session)
+
+    # Check if path exists, if not, make all folders and subfolders of it, and make the file.
+    if not os.path.isfile(logs_path):
+        os.makedirs(logs_path)
+        open(logs_path, "w").close()
+
+    try:
+        start_bot(logs_path)
+    except BaseException as err:
+
+        with open(logs_path, "a") as logfile:
+            logfile.write(f"[IFXG][ERR] {err}")

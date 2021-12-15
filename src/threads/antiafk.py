@@ -34,7 +34,6 @@ def anti_afk_thread(action_lock: threading.Lock):
     The available actions are the following:
         > Emoting
         > Moving
-        > Hitting
         > Jumping
 
     :return:
@@ -47,7 +46,7 @@ def anti_afk_thread(action_lock: threading.Lock):
 
         with action_lock:
 
-            actions = ["emoting", "moving", "hitting", "jumping"]
+            actions = ["emoting", "moving", "jumping"]
             action_choice = random.choice(actions)
             focus_fortnite()
 
@@ -66,13 +65,6 @@ def anti_afk_thread(action_lock: threading.Lock):
                 keyboard.press(direction)
                 time.sleep(1)
                 keyboard.release(direction)
-
-            elif action_choice == "hitting":
-
-                # Handles left clicks (Hitting)
-                pyautogui.click()
-                time.sleep(0.3)
-                pyautogui.click()
 
             else:
 
