@@ -12,21 +12,13 @@ import threading
 
 # Third Party Imports
 import keyboard
-import pyautogui
-import pygetwindow
 
 # Local Application Imports
-
-def focus_fortnite():
-    """
-    Hands over the window focus to the fornite screen.
-    :return:
-    """
-    ft_window = [x for x in pygetwindow.getAllWindows() if x.title.strip() == "Fortnite"][0]
-    ft_window.activate()
+from utils.focus import focus_fortnite
+from utils.logging import log
 
 
-def anti_afk_thread(action_lock: threading.Lock):
+def anti_afk_thread(action_lock: threading.Lock, logs_path: str):
     """
     Keeps the bot from being detected as an AFK player.
     This is achieved by first selecting a random action to be performed, and after
@@ -50,7 +42,7 @@ def anti_afk_thread(action_lock: threading.Lock):
             action_choice = random.choice(actions)
             focus_fortnite()
 
-            print(f"[IFXG][ANTIAFK] Performing '{action_choice}' action.")
+            log(logs_path, "Performing '{action_choice}' action.", "ANTIAFK")
             if action_choice == "emoting":
 
                 # Handles emoting

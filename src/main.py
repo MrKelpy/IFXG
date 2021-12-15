@@ -18,19 +18,9 @@ import pyautogui
 
 # Local Application Import
 import LaminariaCore
-from threads.antiafk import anti_afk_thread, focus_fortnite
-
-
-def log(logs_path: str, msg: str, src: str):
-    """
-    Logs a message to both the console and the logs file via a very simple
-    logging system.
-    :param: src -> Where the log is coming from
-    :return:
-    """
-
-    with open(logs_path, "a") as logsfile:
-        logsfile.write(f"[IFXG][LOG] {msg}")
+from threads.antiafk import anti_afk_thread
+from utils.focus import focus_fortnite
+from utils.logging import log
 
 
 def get_play_button():
@@ -57,7 +47,7 @@ def fix_screen():
     keyboard.press_and_release("esc")
 
 
-def skip_vote():
+def skip_vote(lp: str):
     """
     Skips the imposter vote. This function will be called before the finish_imposters
     due the way the latter works, which causes the side effect of voting on the person at the front
@@ -68,7 +58,8 @@ def skip_vote():
     keyboard.press("f")
     time.sleep(5)
     keyboard.release("f")
-    print("[IFXG][GAME] Tried-for skipping the vote.")
+
+    log(lp, "Tried-for skipping the vote.", "GAME")
 
 
 def hit_ready():
@@ -85,13 +76,13 @@ def hit_ready():
     pyautogui.click()
 
 
-def finish_imposters():
+def finish_imposters(lp: str):
     """
     Long-presses the E key to finish a game of Imposters.
     This will take the bot out of the XP Screen and send it back to the initializer screen.
     :return:
     """
-    skip_vote()
+    skip_vote(lp)
     focus_fortnite()
     keyboard.press("e")
     time.sleep(5)
@@ -106,13 +97,13 @@ def start_bot(logs_path: str):
 
     # Starts the anti-afk system
     action_lock = threading.Lock()  # Prevent two actions from happening at the same time.
-    print("[IFXG][init] Initialized threading lock.")
+    log(logs_path, "Initialized threading lock.", "INIT")
 
-    antiafk_thread = threading.Thread(target=anti_afk_thread, args=(action_lock,), daemon=True)
+    antiafk_thread = threading.Thread(target=anti_afk_thread, args=(action_lock, logs_path), daemon=True)
     antiafk_thread.start()
-    print("[IFXG][init] Started the ANTI-AFK System.")
+    log(logs_path, "Started the ANTI-AFK System.", "INIT")
 
-    print("[IFXG][init] Started main joining loop.")
+    log(logs_path, "Started main joining loop.", "INIT")
     while True:
         """
         Main joining loop. This loop is responsible for keeping the bot alive and
@@ -125,28 +116,28 @@ def start_bot(logs_path: str):
 
         with action_lock:
             hit_ready()
-            print("[IFXG][GAME] Tried-for starting a new imposters game.")
+            log(logs_path, "Tried-for starting a new imposters game.", "GAME")
         time.sleep(20)  # Generic cooldown, games take quite a while to happen, so there's no need to check for game finishes all the time.
 
         with action_lock:
-            finish_imposters()
-            print("[IFXG][GAME] Tried-for finishing the imposters game.")
+            finish_imposters(logs_path)
+            log(logs_path, "Tried-for finishing the imposters game.", "GAME")
         time.sleep(10)  # Around the time it should take for the bot to be sent to the initializer screen again.
 
 
 if __name__ == "__main__":
 
     log_session = LaminariaCore.get_formatted_date_now(formatting=2)
-    logs_path = os.path.join(os.getcwd(), "logs", log_session)
+    logs_path = os.path.join(os.getcwd(), "logs", log_session + ".log")
 
     # Check if path exists, if not, make all folders and subfolders of it, and make the file.
     if not os.path.isfile(logs_path):
-        os.makedirs(logs_path)
+        os.makedirs(os.path.dirname(logs_path))
         open(logs_path, "w").close()
 
     try:
+        assert 1 == 2
         start_bot(logs_path)
-    except BaseException as err:
 
-        with open(logs_path, "a") as logfile:
-            logfile.write(f"[IFXG][ERR] {err}")
+    except BaseException as err:
+        log(logs_path, str(err), "ERROR")
