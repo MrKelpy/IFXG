@@ -42,7 +42,7 @@ def anti_afk_thread(action_lock: threading.Lock, logs_path: str):
             action_choice = random.choice(actions)
             focus_fortnite()
 
-            log(logs_path, "Performing '{action_choice}' action.", "ANTIAFK")
+            log(logs_path, f"Performing '{action_choice}' action.", "ANTIAFK")
             if action_choice == "emoting":
 
                 # Handles emoting

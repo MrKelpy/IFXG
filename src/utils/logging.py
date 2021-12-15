@@ -5,6 +5,8 @@ __github__ = "github.com/MrKelpy"
 __copyright__ = "© Alexandre Silva 2021"
 __license__ = "MIT LICENSE"
 
+# Local Application Imports
+import LaminariaCore
 
 def log(logs_path: str, msg: str, src: str):
     """
@@ -15,6 +17,6 @@ def log(logs_path: str, msg: str, src: str):
     """
 
     with open(logs_path, "a") as logsfile:
-        logsfile.write(f"[IFXG][{src}] {msg}")
+        logsfile.write(f"[{LaminariaCore.get_formatted_date_now(include_seconds=True)}][IFXG][{src}] {msg}\n")
 
     print(f"[IFXG][{src}] {msg}")

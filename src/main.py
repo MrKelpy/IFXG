@@ -7,6 +7,7 @@ __license__ = "MIT LICENSE"
 
 # Built-in Imports
 import threading
+import traceback
 import time
 import os
 
@@ -132,12 +133,14 @@ if __name__ == "__main__":
 
     # Check if path exists, if not, make all folders and subfolders of it, and make the file.
     if not os.path.isfile(logs_path):
-        os.makedirs(os.path.dirname(logs_path))
+        os.makedirs(os.path.dirname(logs_path), exist_ok=True)
         open(logs_path, "w").close()
 
     try:
-        assert 1 == 2
         start_bot(logs_path)
 
+    except KeyboardInterrupt:
+        log(logs_path, "Bot closed.", "STOP")
+
     except BaseException as err:
-        log(logs_path, str(err), "ERROR")
+        log(logs_path, traceback.format_exc(), "ERROR")
