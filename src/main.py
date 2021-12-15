@@ -140,7 +140,10 @@ if __name__ == "__main__":
         start_bot(logs_path)
 
     except KeyboardInterrupt:
+        # A KeyboardInterrupt error will always come up when you willingly close the bot.
+        # This is due to the time.sleeps in the code.
         log(logs_path, "Bot closed.", "STOP")
 
     except BaseException as err:
+        # Any other exception is to be logged as an error in the logs.
         log(logs_path, traceback.format_exc(), "ERROR")
