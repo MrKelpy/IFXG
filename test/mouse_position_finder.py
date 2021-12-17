@@ -15,21 +15,15 @@ import mouse
 import pyautogui
 
 # Local Application Imports
+import LaminariaCore
 
 while True:
     keyboard.wait("º")
     x = mouse.get_position()[0]
     y = mouse.get_position()[1]
-    monitor = screeninfo.get_monitors()[0]
-
-    print(f"Relative X: {(x*100)/monitor.width}")
-    print(f"Relative Y: {(y*100)/monitor.height}")
-    print(f"Calculated: {0.01*((x*100)/monitor.width) * monitor.width}")
-    print(f"Calculated: {0.01*((y*100)/monitor.height) * monitor.height}")
-    print(f"TrueX: {x}")
-    print(f"TrueY: {y}")
-    xx = 0.01*((x*100)/monitor.width) * monitor.width
-    yy = 0.01*((y*100)/monitor.height) * monitor.height
-
-    time.sleep(2)
-    pyautogui.moveTo(xx, yy)
+    relx, rely = LaminariaCore.get_relative_screen_coords(x, y)
+    xx, yy = LaminariaCore.get_absolute_screen_coords(relx, rely)
+    print(f"Relative X: {relx, x}")
+    print(f"Relative Y: {rely, y}")
+    print(f"Abs. X: {xx}")
+    print(f"Abs. Y: {yy}")

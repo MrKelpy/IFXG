@@ -20,6 +20,7 @@ import pyautogui
 # Local Application Import
 import LaminariaCore
 from threads.antiafk import anti_afk_thread
+from threads.afkdetection import afk_detection_thread
 from utils.focus import focus_fortnite
 from utils.logging import log
 
@@ -43,9 +44,9 @@ def fix_screen():
     This function exists to prevent that from happening, by occasionally esc'ing twice.
     :return:
     """
-    keyboard.press_and_release("esc")
+    keyboard.send("ESC")
     time.sleep(0.1)
-    keyboard.press_and_release("esc")
+    keyboard.send("ESC")
 
 
 def skip_vote(lp: str):
@@ -102,6 +103,9 @@ def start_bot(logs_path: str):
 
     antiafk_thread = threading.Thread(target=anti_afk_thread, args=(action_lock, logs_path), daemon=True)
     antiafk_thread.start()
+    afkdetect_thread = threading.Thread(target=afk_detection_thread, args=(action_lock,), daemon=True)
+    afkdetect_thread.start()
+
     log(logs_path, "Started the ANTI-AFK System.", "INIT")
 
     log(logs_path, "Started main joining loop.", "INIT")

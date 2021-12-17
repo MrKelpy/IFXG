@@ -15,10 +15,10 @@ import asyncio
 import os
 
 # Third Party Imports
+import screeninfo
 from discord.ext import commands
 import discord
 from fpdf import FPDF
-
 
 # Local Application Imports
 
@@ -91,6 +91,44 @@ def time_until_midnight():
     timedelta_until_midnight = datetime.datetime.combine(tomorrow, datetime.time.min) - datetime.datetime.now()
     return timedelta_until_midnight.seconds
 
+
+###############################################################################
+###                               GENERAL                                   ###
+###############################################################################
+
+
+def get_absolute_screen_coords(relx, rely):
+    """
+    Returns absolute screen coordinates based off the given relative
+    coordinates. For instance, in a 1920x720 screen, the x50, y50 input would be
+    x960, y360.
+    :param relx: Relative X Coordinate
+    :param rely: Relative Y Coordinate
+    :return: Absolute Coordinates
+    """
+
+    monitor = screeninfo.get_monitors()[0]
+    x = (relx*monitor.width)/100
+    y = (rely*monitor.height)/100
+    return x, y
+
+
+def get_relative_screen_coords(x, y):
+    """
+    Returns relative screen coordinates based off the given absolute
+    coordinates. The relative coordinates are percentage-based values calculates
+    relatively to the monitor specs and the given coords.
+    :param x: Absolute X
+    :param y: Absolute Y
+    :return:
+    """
+
+    monitor = screeninfo.get_monitors()[0]
+    relx = (x*100)/monitor.width
+    rely = (y*100)/monitor.height
+    return relx, rely
+
+
 ###############################################################################
 ###                            PLACEHOLDERS                                 ###
 ###############################################################################
@@ -112,6 +150,7 @@ async def big_ipsum():
     return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt " \
            "ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco " \
            "laboris nisi ut aliquip ex ea commodo consequat."
+
 
 ###############################################################################
 ###                             DISCORD.PY                                  ###

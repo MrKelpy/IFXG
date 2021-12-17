@@ -33,6 +33,7 @@ def anti_afk_thread(action_lock: threading.Lock, logs_path: str):
     Keeps the bot from being detected as an AFK player.
     This is achieved by performing a random emote, since that a simple action
     that takes a buttonpress to perform, and cancels the AFK timer.
+    This is not 100% accurate, so there will be another thread handling the actions when this fails.
     :return:
     """
 
