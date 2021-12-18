@@ -6,6 +6,7 @@ __copyright__ = "© Alexandre Silva 2021"
 __license__ = "MIT LICENSE"
 
 # Built-in Imports
+import signal
 import threading
 import traceback
 import time
@@ -21,6 +22,7 @@ import pyautogui
 import LaminariaCore
 from threads.antiafk import anti_afk_thread
 from threads.afkdetection import afk_detection_thread
+
 from utils.focus import focus_fortnite
 from utils.logging import log
 
@@ -91,6 +93,28 @@ def finish_imposters(lp: str):
     keyboard.release("e")
 
 
+def start_threads(action_lock: threading.Lock, logs_path:str):
+    """
+    Starts all the threads that the bot depends on.
+    :return:
+    """
+
+    # Lists all the available threads and starts them
+    thread_list = {anti_afk_thread, afk_detection_thread}
+
+    for thread in thread_list:
+        thread_obj = threading.Thread(target=thread, args=(action_lock, logs_path), daemon=True)
+        thread_obj.start()
+
+
+def stop_bot():
+    """
+    Kills the proccess that the bot is running on.
+    """
+    pid = os.getpid()
+    os.kill(pid, signal.SIGTERM)
+
+
 def start_bot(logs_path: str):
     """
     Starts the bot and all of its threads.
@@ -101,12 +125,11 @@ def start_bot(logs_path: str):
     action_lock = threading.Lock()  # Prevent two actions from happening at the same time.
     log(logs_path, "Initialized threading lock.", "INIT")
 
-    antiafk_thread = threading.Thread(target=anti_afk_thread, args=(action_lock, logs_path), daemon=True)
-    antiafk_thread.start()
-    afkdetect_thread = threading.Thread(target=afk_detection_thread, args=(action_lock,), daemon=True)
-    afkdetect_thread.start()
+    # Starts all the necessary threads
+    start_threads(action_lock, logs_path)
 
-    log(logs_path, "Started the ANTI-AFK System.", "INIT")
+    # Sets up the hotkey that makes the bot close when pressed. (:q)
+    keyboard.add_hotkey("ctrl+k", stop_bot)
 
     log(logs_path, "Started main joining loop.", "INIT")
     while True:
@@ -143,11 +166,9 @@ if __name__ == "__main__":
     try:
         start_bot(logs_path)
 
-    except KeyboardInterrupt:
-        # A KeyboardInterrupt error will always come up when you willingly close the bot.
-        # This is due to the time.sleeps in the code.
-        log(logs_path, "Bot closed.", "STOP")
-
     except BaseException as err:
-        # Any other exception is to be logged as an error in the logs.
+        # Any exception is to be logged as an error in the logs.
         log(logs_path, traceback.format_exc(), "ERROR")
+
+    finally:
+        stop_bot()

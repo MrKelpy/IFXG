@@ -15,6 +15,8 @@ import keyboard
 
 # Local Application Imports
 import LaminariaCore
+from utils.logging import log
+from utils.focus import focus_fortnite
 
 
 def check_for_afk_notice(action_lock: threading.Lock, afk_notice: str):
@@ -24,7 +26,9 @@ def check_for_afk_notice(action_lock: threading.Lock, afk_notice: str):
     """
     try:
         with action_lock:
+            focus_fortnite()
             _, _ = pyautogui.locateCenterOnScreen(afk_notice, grayscale=True, confidence=0.7)
+
         return True
 
     except ValueError:
@@ -46,6 +50,7 @@ def leave_game(action_lock: threading.Lock):
     confirm_x, confirm_y = LaminariaCore.get_absolute_screen_coords(60, 72)
 
     with action_lock:
+        focus_fortnite()
 
         # Hit ESC to bring up the menu
         keyboard.send("ESC")
@@ -67,7 +72,7 @@ def leave_game(action_lock: threading.Lock):
         time.sleep(0.1)
 
 
-def afk_detection_thread(action_lock: threading.Lock):
+def afk_detection_thread(action_lock: threading.Lock, logs_path: str):
     """
     Because the AntiAFK system is not 100% accurate, this thread handles
     any cases where the former should fail, by leaving the match and entering a new
@@ -77,6 +82,7 @@ def afk_detection_thread(action_lock: threading.Lock):
     """
 
     afk_notice = "./assets/afknotice.png"
+    log(logs_path, "Started the complementary AFK Detection system thread.", "INIT")
 
     while True:
 
@@ -85,4 +91,6 @@ def afk_detection_thread(action_lock: threading.Lock):
         # Performs the game-leaving
         if not check_for_afk_notice(action_lock, afk_notice):
             continue
+
+        log(logs_path, "AFK notice detected. Leaving the game.", "AFKDETECT")
         leave_game(action_lock)
