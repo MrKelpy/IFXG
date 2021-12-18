@@ -7,6 +7,7 @@ NOTICE: Nor this program nor the author is associated with any shooting game. Us
 1- Open that famous shooting game.<br>
 2- Download the zip/source code.<br>	2.1- In case you've downloaded the .zip, extract it into a folder.<br>	2.2- In case you've downloaded the source code, you probably know what you're doing. <br>3- Select the Imposters mode.<br>
 4- Run IFXG.exe<br>
+5- Whenever you want to stop the bot, press CTRL+K.
 <br>
 Enjoy the EXP!<br>
 
