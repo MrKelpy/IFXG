@@ -27,7 +27,7 @@ def check_for_afk_notice(action_lock: threading.Lock, afk_notice: str):
     try:
         with action_lock:
             focus_fortnite()
-            _, _ = pyautogui.locateCenterOnScreen(afk_notice, grayscale=True, confidence=0.7)
+            _, _ = pyautogui.locateCenterOnScreen(afk_notice, grayscale=False, confidence=0.75)
 
         return True
 
@@ -81,7 +81,7 @@ def afk_detection_thread(action_lock: threading.Lock, logs_path: str):
     :return:
     """
 
-    afk_notice = "./assets/afknotice.png"
+    afk_notice = "./assets/Untitled.png"
     log(logs_path, "Started the complementary AFK Detection system thread.", "INIT")
 
     while True:

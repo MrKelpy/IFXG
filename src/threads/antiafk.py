@@ -41,7 +41,7 @@ def anti_afk_thread(action_lock: threading.Lock, logs_path: str):
     # We're using the keyboard module to simulate keypresses, this
     # means that we have to pass in the actual key names, i.a "a", "b", "RETURN".
     while True:
-        time.sleep(15)  # Action cooldown
+        time.sleep(10)  # Action cooldown
 
         with action_lock:
             focus_fortnite()

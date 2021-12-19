@@ -12,8 +12,10 @@ import keyboard
 
 # Local Application Imports
 
+keyboard.wait("º")
+
 try:
-    x, y = pyautogui.locateCenterOnScreen("test.png", grayscale=True, confidence=0.8)
+    x, y = pyautogui.locateCenterOnScreen("../src/assets/Untitled.png", grayscale=False, confidence=0.75)
     print(f"found {x, y}")
 except pyautogui.ImageNotFoundException:
     print("not found")
