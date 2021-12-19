@@ -7,7 +7,6 @@ __license__ = "MIT LICENSE"
 
 # Built-in Imports
 import time
-import random
 import threading
 
 # Third Party Imports

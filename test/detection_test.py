@@ -15,7 +15,7 @@ import keyboard
 keyboard.wait("º")
 
 try:
-    x, y = pyautogui.locateCenterOnScreen("../src/assets/Untitled.png", grayscale=False, confidence=0.75)
+    x, y = pyautogui.locateCenterOnScreen("../src/assets/afknotice.png", grayscale=False, confidence=0.75)
     print(f"found {x, y}")
 except pyautogui.ImageNotFoundException:
     print("not found")

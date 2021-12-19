@@ -22,6 +22,7 @@ import pyautogui
 import LaminariaCore
 from threads.antiafk import anti_afk_thread
 from threads.afkdetection import afk_detection_thread
+from threads.error_screen_fix import error_screen_fix_thread
 
 from utils.focus import focus_fortnite
 from utils.logging import log
@@ -99,10 +100,13 @@ def start_threads(action_lock: threading.Lock, logs_path:str):
     :return:
     """
 
-    # Lists all the available threads and starts them
-    thread_list = {anti_afk_thread, afk_detection_thread}
+    # Starts a set of threads that the bot has
+    thread_set = {anti_afk_thread,
+                  afk_detection_thread,
+                  error_screen_fix_thread}
 
-    for thread in thread_list:
+
+    for thread in thread_set:
         thread_obj = threading.Thread(target=thread, args=(action_lock, logs_path), daemon=True)
         thread_obj.start()
 
